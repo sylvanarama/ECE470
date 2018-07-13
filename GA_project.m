@@ -3,17 +3,15 @@
 % Set Parameters
 mp = 0.05; % mutation probability
 feature_num = 90;
-pop_size = 100; % dummy value --> look for good population number
+pop_size = 10; % dummy value --> look for good population number
 prev_gen_result = [0, 0, 0];
 delta = [1, 1, 1];
 
 % 1. Load data: 1 million songs encoded with 90 audio features each, and
 % partition into training, testing, and validation sets
 %all_songs = readtable("year_prediction.csv");
-[train_data, test_data, test_labels, validation_data] = partition_data(all_songs);
-train_data = train_data(1:500, :);
-test_data = test_data(1:200, :);
-test_labels = test_labels(1:200, :);
+%[train_data, test_data, test_labels, validation_data] = partition_data(all_songs);
+[train_data, test_data, test_labels, validation_data] = partition_data(song_subset1000);
 
 while(true)
 
@@ -26,14 +24,18 @@ while(true)
     % 3. Evaluate the fitness of each chromosome for classification accuracy
     fitness = zeros(pop_size);
     for i = 1:pop_size
+        disp(i);
         % find indices of selected features
         k = find(population(i,:)); 
         % create training and testing set using only seected features
         train_features = train_data(:, [1,k+1]); 
         test_features = test_data(:, k);
-        
+        tic
         model = fitcecoc(train_features, 'label');
+        toc
+        tic
         [predicted_labels] = predict(model, test_data); 
+        toc
         fitness(i) = calc_fitness(predicted_labels, test_labels);    
     end
 
