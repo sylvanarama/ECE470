@@ -5,6 +5,7 @@ function [train, test, test_labels, validate] = partition_data(features)
     % Randomly permute the dataset indices
     num_samples = size(features, 1);
     perm = randperm(num_samples);
+    
 
     % Split the dataset into 70% training and 30% validation
     split = floor(num_samples * 0.7);
