@@ -20,3 +20,17 @@ Population initialization: random init leads to too much variation; currently us
 This was suggested by reading that using opposing population leads to greater coverage and faster convergence
 Fitness function: one-vs-all classifier. Using knn for fastest training time. Calculating fitness based on distance from target year. 
 Termination: currently not working.
+
+TO-D0:
+1. Find a way to improve the fitness function; currently does not get much past a maximum 0.3
+	- population initialization?
+	- different learner?
+	- try some sort of unsupervised learning?
+	- differnet crossover operator? (OR, AND, select with prob...)
+2. Validation
+	- cross validation
+	- find a way to run -> servers?
+	- implement other feature selection methods
+		a. forwards or backwards selection
+		b. lasso?
+		c. ?
