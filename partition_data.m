@@ -20,7 +20,7 @@ function [train, test, test_labels, validate] = partition_data(features)
     % Partition the dataset 
     train = features(train_indices, :);
     test = features(test_indices, 2:end);
-    test_labels = features(test_indices, 1);
+    test_labels = table2array(features(test_indices, 1));
     validate = features(validation_indices, :);
 
 end
