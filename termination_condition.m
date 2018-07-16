@@ -8,5 +8,7 @@ function [result, terminate] = termination_condition(population, fitness, prev_g
     result = [diversity, mean_fitness, max_fitness];
     if((abs(result-prev_gen_result)<= delta) & (diversity <= min_diversity)) 
         terminate = true;
+    else
+        terminate = false;
     end
 end
