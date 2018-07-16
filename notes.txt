@@ -1,0 +1,22 @@
+NOTES
+
+OPTIMAL PARAMETERS
+ep: between 0.3-0.5
+cp: between 0.9 and 0.95
+mp: between 0.001 and 0.005
+k1: 0.9
+k2: 0.25 (with a mutation rate of 0.005)
+population size: 910 (but 350 works)
+
+METHODS
+Static mutation/crossover: works well and quickly in test, but gets stuck on local max when applied to data
+Adaptive mutation/crossover: performs slightly worse than static in test, may improve when applied to data
+Crossover: single point works best
+Population initialization: random init leads to too much variation; currently using:
+	1: all features selected
+	2-91: one feature per chromosome
+	92 - 182: one feature de-selectd per chromosome
+	183->pop_size: first half random, second half inverse of 
+This was suggested by reading that using opposing population leads to greater coverage and faster convergence
+Fitness function: one-vs-all classifier. Using knn for fastest training time. Calculating fitness based on distance from target year. 
+Termination: currently not working.
