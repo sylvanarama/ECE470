@@ -34,3 +34,54 @@ TO-D0:
 		a. forwards or backwards selection
 		b. lasso?
 		c. ?
+		
+		
+Figures:
+avg_fit_with_correlated_feature 
+- ep = 0.1
+- k1 = 1.0
+- k2 = 0.5
+- non-random population initialization
+- 500 songs from every 5 yrs 1960-2010
+- set 1st feature to by year/5
+- found correlation in 1st round
+- took 13 generations for mean fitness to reach 0.99
+- stayed for 3
+- dropped to 0.64 at generation 16
+- oscillates with period of ~8 generations (13-21)
+
+mean&maxFit
+- pop_size = 199; % population size
+- ep = 0.1;      % elitism percentage (percentage of fittest chromosomes to preserve)
+- k1 = 1.0;      % Adaptive crossover factor
+- k2 = 0.5;  	% adaptive mutation factor
+- heuristic init
+- knn classifier
+- data size: 1000 each from every five years 1960-2010, subsampled to 1000 training samps
+- max fit: 0.3, in about 8 generations
+
+Timbre Features: 12 basis features, x = time, y = frequency, z = amplitude
+1 - average loudness
+2 - brightness
+3 - "flatness" --> noise hss high spectral flatness, tonal has low
+4 - strong attack
+5 - 1st harmonic?
+6 - medium attack
+7 - 
+8 - ??? max: song 488428, 2001, 126.7413 min: song 328164, 2001, -72.5039
+9 - 
+10 - 
+11 - oscillation/vibrato?
+12 - third harmonic?
+
+To try:
+- group all songs of year together [DONE]
+- find avg and variance of each feature for each year -> want ones with least intra-year (timbre avg 10), most inter-year (timbrecovariance 15), in a steady trend [DONE]
+- find songs with min and max of each timbreAverage feature, listen, describe 
+- regression models [DONE]
+- limit number of identical chromosomes
+- different population initialization
+
+Trials:
+- adaptive, linear regression, 200 gen, ep = 2%, k2  = 0.6 --> no improvement past 54% (starting max)
+- adaptive, linear regression, 24 gen, ep = 1%, k1 = 0.9, k2 = 0.4 --> no improvement past 54% (starting max)
