@@ -16,14 +16,14 @@ function offspring = crossover_adaptive(parents, fitness, ep, k1, k2)
     n = floor(ep*pop_size);
     % preserve best solutions **assumes "select" was run before crossover**
     offspring(1:n,:) = parents(1:n,:);
-    for i = 1:n
-        for j = 1:num_features
-            x = rand();
-            if x <= pm(i)
-                offspring(i,j) = ~offspring(i,j);
-            end
-        end
-    end
+%     for i = 1:n
+%         for j = 1:num_features
+%             x = rand();
+%             if x <= pm(i)
+%                 offspring(i,j) = ~offspring(i,j);
+%             end
+%         end
+%     end
    
     for i = 1:2:pop_size-1   
         x = rand();
@@ -42,6 +42,8 @@ function offspring = crossover_adaptive(parents, fitness, ep, k1, k2)
             cross_pt = randi(num_features);
             offspring(i,:) = [parent1(1:cross_pt), parent2(cross_pt+1:end)];
             offspring(i+1,:) = [parent2(1:cross_pt), parent1(cross_pt+1:end)];
+%             offspring(i,:) = and(parent1, parent2);
+%             offspring(i+1,:) = or(parent1, parent2);
         else
             p1 = randi(size(parents, 1));
             p2 = randi(size(parents, 1));
