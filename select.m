@@ -20,8 +20,8 @@ function [new_pop, new_fit] = select(population, fitness, elitism)
     new_fit(1:n) = f_sort(1:n);
     
     % Build the roulette wheel from the fitnesses
-    wheel = zeros(1,pop_size);
-    for i = 1:pop_size
+    wheel = zeros(1,length(f_sort));
+    for i = 1:length(f_sort)
         wheel(i) = sum(f_sort(1:i));
     end
     wheel = wheel/max(wheel);
