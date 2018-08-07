@@ -12,6 +12,10 @@ function [new_pop, new_fit] = select(population, fitness, elitism)
     % Copy over the current best solutions to the new population
     [f_sort, f_idx] = sort(fitness, 'descend');
     pop_sort = population(f_idx,:);
+    
+    [pop_sort, ia, ~] = unique(pop_sort, 'stable', 'rows');
+    f_sort = f_sort(ia);
+    
     new_pop(1:n,:) = pop_sort(1:n,:);
     new_fit(1:n) = f_sort(1:n);
     
@@ -29,7 +33,7 @@ function [new_pop, new_fit] = select(population, fitness, elitism)
         new_pop(i,:) = pop_sort(index,:);
         new_fit(i) = f_sort(index);
     end
-    [new_fit, idx]  = sort(new_fit, 'descend');
-    new_pop = new_pop(idx, :);
+    %[new_fit, idx]  = sort(new_fit, 'descend');
+    %new_pop = new_pop(idx, :);
      %[new_pop(2:end,:), idx] = datasample(population, pop_size-1, 'Weights', fitness);
 end
