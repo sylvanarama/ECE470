@@ -5,7 +5,8 @@ function fitness = calc_fitness(predicted_labels, test_labels)
 %     fitness(fitness == Inf) = 1;
 %     fitness(fitness > 1) = 1;
 %     fitness = sum(fitness)/length(test_labels);
-    accuracy = 1-(abs(test_labels-predicted_labels)./test_labels)*100;
+    year_spread = max(test_labels)-min(test_labels);
+    accuracy = 1-(abs(test_labels-predicted_labels)./year_spread);
     accuracy(accuracy < 0) = 0;
     fitness = mean(accuracy);
 end
