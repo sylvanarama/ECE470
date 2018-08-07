@@ -1,5 +1,5 @@
 % TEST GA
-function [diversity, mean_fitness, max_fitness] = test_ga(target, len, pop_size, max_gen, ep, mp, cp, k1, k2, adapt)
+function [diversity, mean_fitness, max_fitness] = test_ga(target, len, pop_size, pop_init, max_gen, ep, mp, cp, k1, k2, adapt)
 %     cp = 0.93;
 %     mp = 0.01;
 %     pop_size = 350;
@@ -7,12 +7,32 @@ function [diversity, mean_fitness, max_fitness] = test_ga(target, len, pop_size,
 %     max_gen = 200;
 %     len = 90;
 %     target = randi([0,1], 1, len);
-%     population = randi([0 1], pop_size, len);
-    %population = zeros(pop_size, len);
-    %population(1:pop_size/2, :) = [ones(1,len); eye(len); randi([0,1],pop_size/2-len-1, len)];
-    %population(pop_size/2+1:end, :) = ~population(1:pop_size/2, :);
-    population = randi([0,1], pop_size, len);
-    population(1,:) = ones(1,90);
+    
+    % OPTION 1: random initialization
+    if(pop_init == 1)
+        population = randi([0,1], pop_size, len);
+        %population(1,:) = ones(1,len);
+    end
+    
+    % OPTION 2: heuristic initialization
+    %Heuristic A
+    if(pop_init == 2)
+        n = floor((pop_size-(2*len)-1)/2);
+        r = randi([0,1], n, len);
+        population = [ones(1,len); eye(len); ~eye(len); r; ~r];
+    end
+    % Heuristic B
+    if(pop_init == 3)
+        n = floor((pop_size-len-1)/2);
+        r = randi([0,1], n, len);
+        population = [ones(1,len); eye(len); r; ~r];
+    end
+    
+    if(size(population,1) < pop_size)
+        n = pop_size-size(population,1);
+        population = [population; randi([0,1], n, len)];
+    end
+    
     fitness = zeros(pop_size, 1);
     diversity = zeros(max_gen, 1);
     mean_fitness = zeros(max_gen, 1);
