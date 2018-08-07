@@ -2,9 +2,9 @@
 
 % Set Parameters
 pop_size = 100; % population size
-ep = 0.10;      % elitism percentage (percentage of fittest chromosomes to preserve)
-cp = 0.93;      % crossover probability (when not using adaptive)
-mp = 0.005;      % mutation probability (when not using adaptive)
+ep = 0.20;      % elitism percentage (percentage of fittest chromosomes to preserve)
+cp = 0.98;      % crossover probability (when not using adaptive)
+mp = 0.006;      % mutation probability (when not using adaptive)
 k1 = 0.9;      % Adaptive crossover factor
 k2 = 0.4;      % Adaptive mutation factor
 
@@ -23,6 +23,7 @@ data = songs1000;
 % 2. Generate chromosome: binary encoding representing the use or exclusion
 % of each feature for classification (100 random binary strings)
 population = randi([0,1], pop_size, len);
+population(1,:) = ones(1,90);
 %population = zeros(pop_size, len);
 %n = floor((pop_size-(2*len)-1)/2);
 %n = floor((pop_size-len-1)/2);
@@ -32,11 +33,12 @@ population = randi([0,1], pop_size, len);
 %population(pop_size/2+1:end, :) = ~population(2:pop_size/2, :);
 
 best_model = fitlm(train_data,'purequadratic', 'ResponseVar', 'label');
-start_fit = 1/model.RMSE;
+%[best_model, validationRMSE] = trainRegressionModel(train_subset);
+%start_fit = 1/best_model.RMSE;
+%best_fit = start_fit;
+[predicted_labels] = predict(best_model, test_data); 
+start_fit = calc_fitness(predicted_labels, test_labels);
 best_fit = start_fit;
-[predicted_labels] = predict(model, test_data); 
-start_acc = calc_fitness(predicted_labels, test_labels);
-best_acc = start_fit;
 best_chrom = ones(1,90);
 
 
@@ -47,31 +49,40 @@ for gen = 1:max_gen
     
     % randomly select subset of traning and testing data (prevent
     % over-fitting)
+    %[train_data, test_data, test_labels] = partition_data(data);
     %train_subset = datasample(train_data, 10000);
     %[test_subset, index] = datasample(test_data, 3000);
     %test_labels_subset = test_labels(index);
 
     % 3. Evaluate the fitness of each chromosome for classification accuracy
     fitness = zeros(pop_size, 1);
+    %fit_int = zeros(3,1);
     
     for i = 1:pop_size      
         % find indices of selected features
         k = find(population(i,:)); 
         
         % create training and testing set using only selected features
-        train_subset = train_data(:, [1,k+1]);
-        test_subset = test_data(:, k);
-        %model = fitcecoc(train_subset, 'label', 'Coding', 'onevsall', 'Learners', 'knn');
-        model = fitlm(train_subset,'purequadratic', 'ResponseVar', 'label');
-        %[predicted_labels] = predict(model, test_subset); 
-        %fitness(i) = calc_fitness(predicted_labels, test_labels);
-        fitness(i) = 1/model.RMSE;
+        
+        %for j = 1:3
+            %[train_data, test_data, test_labels] = partition_data(data);
+            train_subset = train_data(:, [1,k+1]);
+            test_subset = test_data(:, k);
+            %model = fitcecoc(train_subset, 'label', 'Coding', 'onevsall', 'Learners', 'knn');
+            %[model, validationRMSE] = trainRegressionModel(train_subset);
+            model = fitlm(train_subset,'purequadratic', 'ResponseVar', 'label');
+            [predicted_labels] = predict(model, test_subset); 
+            fitness(i) = calc_fitness(predicted_labels, test_labels);
+            %fitness(i) = 1/model.RMSE;
+            %fit_int(j) = 1/model.RMSE;
+        %end
+        %fitness(i) = mean(fit_int);
         
         if fitness(i) > best_fit
             best_model = model;
             best_fit = fitness(i);
             [predicted_labels] = predict(model, test_subset);
-            best_acc = calc_fitness(predicted_labels, test_labels);
+            %best_acc = calc_fitness(predicted_labels, test_labels);
             best_chrom = population(i,:);
         end
         %fprintf("Fitness for chromosome %d is %d\n", i, fitness(i));
