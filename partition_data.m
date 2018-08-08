@@ -23,7 +23,7 @@ function [train, test, test_labels] = partition_data(features)
 %     test_labels = table2array(features(test_indices, 1));
 %     validate = features(validation_indices, :);
     
-year = 1980;
+year = 1922;
 train = table();
 test = table();
 test_labels = [];

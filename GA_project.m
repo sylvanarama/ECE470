@@ -38,7 +38,8 @@ results = zeros(max_gen, 3);
 
     % Calculate the performance of a model trained using all the features
     % Use at the end for comparison
-    best_model = fitlm(train_data,'purequadratic', 'ResponseVar', 'label');
+    start_model = fitlm(train_data,'purequadratic', 'ResponseVar', 'label');
+    best_model = start_model;
     %[best_model, validationRMSE] = trainRegressionModel(train_subset);
     %start_fit = 1/best_model.RMSE;
     %best_fit = start_fit;
